@@ -18,8 +18,13 @@ def main():
     print(f"--- Begin report of {book_path} ---")
     print(f"{num_words} was found in the document")
     
-    for char in num_chars:
-        print(f"The '{char}' was found {num_chars[char]} times")
+    num_chars.sort(reverse=True, key=sort_on)
+    
+    list_of_dict = []
+    for pair in num_chars:
+        list_of_dict.append(pair)
+    for pair in list_of_dict:
+        print(f"The {pair['char']} character was found {pair['num']} times")
 
 def get_book_text(path):
     with open(path) as f:
@@ -33,17 +38,24 @@ def count_words(text):
     return counter
 
 def count_chars(text):
-    counter = 0
     lower_case_text = text.lower()
     chars_dict = {}
 
     for char in lower_case_text:
-        if char not in chars_dict:
-            chars_dict[char] = 1
-        else:
-            chars_dict[char] += 1
-    return chars_dict
+        if char.isalpha() == True:
+            if char not in chars_dict:
+                chars_dict[char] = 1
+            else:
+                chars_dict[char] += 1
+
+    char_list = []
+    for char, num in chars_dict.items():
+        char_info = {"char": char, "num": num}
+        char_list.append(char_info)
+    return char_list
 
 ### NÅET HERTIL HVOR DU SKAL SORT DIN DICT ###
+def sort_on(dict):
+    return dict["num"]
 
 main()
